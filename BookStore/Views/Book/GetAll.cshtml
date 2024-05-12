@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BookStore.Models.Domain.Book>
+@{
+    ViewData["Title"] = "Livres";
+}
+
+<div class="container pt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-dark" href="/Book/Add">+ Ajouter un livre</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Livres</h3>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <form asp-controller="Book" asp-action="GetAll" method="get" class="d-flex">
+                        <input name="searchTerm" class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                    </form>
+                </div>
+            </div>
+
+            <table class="table table-stripped table-bordered table-dark">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Titre</th>
+                        <th>Genre</th>
+                        <th>ISBN</th>
+                        <th>Pages</th>
+                        <th>Auteur</th>
+                        <th>Éditeur</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @try
+                                {
+                                    <img class="card-img-top imageThumbnail" src="@Url.Content("~/Images/" + item.ImagePath)" asp-append-version="true" style="width: 150px; height: 150px;" />
+                                }
+                                catch (Exception ex)
+                                {
+                                    <span class="text-danger">Image indisponible</span>
+                                }
+                            </td>
+                            <td>@item.Title</td>
+                            <td>@item.GenreName</td>
+                            <td>@item.Isbn</td>
+                            <td>@item.TotalPages</td>
+                            <td>@item.AuthorName</td>
+                            <td>@item.PublisherName</td>
+                            <td>
+                                <a class="btn btn-success" href="/Book/Update?id=@item.Id"><i class="bi bi-pen"></i></a> |
+                                <a class="btn btn-danger" onclick="return window.confirm('Êtes-vous sûr ?')" href="/Book/Delete?id=@item.Id"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
